@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Router } from "@reach/router";
 import IdentityModal from "react-netlify-identity-widget";
 import Layout from "../components/layout";
@@ -10,20 +10,25 @@ import { navigate } from "gatsby";
 import "react-netlify-identity-widget/styles.css";
 
 const Dashboard = ({ location }) => {
+  const [isVisible, setVisibility] = useState(true);
+
+  const showModal = () => setVisibility(true);
+
   useEffect(() => {
     if (location.pathname.match(/^\/dashboard\/?$/)) {
       navigate("/dashboard/login", { replace: true });
     }
   }, [location.pathname]);
+
   return (
     <Layout>
       <Profile />
       <Router>
         <RouteBase path="/dashboard/base" />
         <RouteSecret path="/dashboard/secret" />
-        <RouteLogin path="/dashboard/login" />
+        <RouteLogin path="/dashboard/login" showModal={showModal} />
       </Router>
-      <IdentityModal showDialog={true} />
+      <IdentityModal showDialog={isVisible} onCloseDialog={showModal} />
     </Layout>
   );
 };
