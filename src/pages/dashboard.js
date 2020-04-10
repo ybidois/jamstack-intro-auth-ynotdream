@@ -8,6 +8,7 @@ import RouteSecret from "../components/route-secret";
 import RouteLogin from "../components/route-login";
 import { navigate } from "gatsby";
 import "react-netlify-identity-widget/styles.css";
+import PrivateRoute from "../components/private-route";
 
 const Dashboard = ({ location }) => {
   const [isVisible, setVisibility] = useState(true);
@@ -22,13 +23,16 @@ const Dashboard = ({ location }) => {
 
   return (
     <Layout>
-      <Profile />
+      <Profile showModal={showModal} />
       <Router>
-        <RouteBase path="/dashboard/base" />
-        <RouteSecret path="/dashboard/secret" />
+        <PrivateRoute path="/dashboard/base" component={RouteBase} />
+        <PrivateRoute path="/dashboard/secret" component={RouteSecret} />
         <RouteLogin path="/dashboard/login" showModal={showModal} />
       </Router>
-      <IdentityModal showDialog={isVisible} onCloseDialog={showModal} />
+      <IdentityModal
+        showDialog={isVisible}
+        onCloseDialog={() => setVisibility(false)}
+      />
     </Layout>
   );
 };
